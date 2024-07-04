@@ -5,7 +5,8 @@ import '../../../../../models/article.dart';
 
 class Items extends StatelessWidget {
   const Items({
-    super.key, required this.articles,
+    super.key,
+    required this.articles,
   });
 
   final List<Article> articles;
@@ -28,8 +29,52 @@ class Items extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20,),
-          
+          const SizedBox(
+            height: 20,
+          ),
+          GridView.builder(
+            padding: const EdgeInsets.all(6),
+            shrinkWrap: true,
+            itemCount: articles.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (context, index) {
+              return Container(
+                width: MediaQuery.of(context).size.width * 0.42,
+                margin: const EdgeInsets.all(0),
+                child: GestureDetector(
+                  onTap: () {
+                    Route route = MaterialPageRoute(
+                      builder: (context) => const ArticleScreen(),
+                      settings: RouteSettings(
+                        arguments: articles[index],
+                      ),
+                    );
+                    Navigator.push(context, route);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ImageContainer(
+                          width: MediaQuery.of(context).size.width * 0.42,
+                          imageUrl: articles[index].imageUrl),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        articles[index].title,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold, height: 1.5),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
