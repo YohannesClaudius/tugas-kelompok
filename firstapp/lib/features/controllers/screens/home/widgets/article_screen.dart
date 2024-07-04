@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:news_app/features/controllers/screens/home/widgets/headline_news.dart';
 import 'package:news_app/features/controllers/screens/home/widgets/image_container.dart';
 import 'package:news_app/features/controllers/screens/home/widgets/tag_news.dart';
+
 import '../../../../../models/article.dart';
 import '../../../favorite/favorite_controller.dart';
 
@@ -118,7 +119,74 @@ class _ArticleScreenState extends State<ArticleScreen> {
             )
           ],
         ),
-        
+       floatingActionButton: SpeedDial(
+          icon: Icons.share,
+          activeIcon: Icons.close,
+          backgroundColor: Colors.black,
+          overlayColor: Colors.grey,
+          foregroundColor: Colors.white,
+          overlayOpacity: 0.5,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.bookmark),
+              shape: const CircleBorder(),
+              backgroundColor: Colors.white,
+              foregroundColor: favoriteArticles.contains(article)
+                  ? Colors.black
+                  : Colors.black.withOpacity(0.4),
+              onTap: () {
+                if (favoriteArticles.contains(article)) {
+                  setState(() {
+                    favoriteArticles.remove(article);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Article removed from favorites')),
+                    );
+                  });
+                } else {
+                  setState(() {
+                    favoriteArticles.add(article);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        behavior: SnackBarBehavior.fixed,
+                        content: Text('Article saved to favorites'),
+                      ),
+                    );
+                  });
+                }
+              },
+            ),
+            SpeedDialChild(
+              child: const Tooltip(
+                showDuration: Duration(seconds: 2),
+                waitDuration: Duration(milliseconds: 20),
+                message: 'Copy',
+                child: Icon(Icons.link),
+              ),
+              shape: const CircleBorder(),
+              backgroundColor: Colors.white,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Link copied'),
+                  ),
+                );
+              },
+            ),
+            SpeedDialChild(
+              shape: const CircleBorder(),
+              child: const Icon(FontAwesomeIcons.facebook),
+              backgroundColor: Colors.white,
+              onTap: () {},
+            ),
+            SpeedDialChild(
+              shape: const CircleBorder(),
+              child: const Icon(FontAwesomeIcons.twitter),
+              backgroundColor: Colors.white,
+              onTap: () {},
+            ),
+          ],
+        ), 
       ),
     );
   }
